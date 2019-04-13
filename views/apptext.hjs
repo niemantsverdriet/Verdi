@@ -1,0 +1,8 @@
+<div id="listview">
+    {{^app__list}}
+        <div id="no_list_results">Geen {{ plural__typename }} gevonden ...</div>
+    {{/app__list}}
+    {{#app__views.new}}
+        <i class="material-icons button-circle" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}{{ app__views.new.view__path }}')">add</i>
+    {{/app__views.new}}
+</div>

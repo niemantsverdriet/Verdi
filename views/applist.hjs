@@ -1,0 +1,39 @@
+<div id="listview">
+    {{^app__list}}
+        <div id="no_list_results">Geen {{ plural__typename }} gevonden ...</div>
+    {{/app__list}}
+    {{#app__list}}
+        <div class="card card-3">
+            {{#image__doc}}
+                <div class="card-visual">
+                    <img src="/images{{ image__doc }}" alt="{{ title__doc }}" class="card-image"/>
+                </div>
+            {{/image__doc}}
+            <h2 class="card-title">{{ title__doc }}</h2>
+            {{#description__doc}}
+                <p class="card-description">{{ description__doc }}</p>
+            {{/description__doc}}
+            {{#edit__mode}}
+                <div class="card-buttons">
+                    {{#app__views.delete}}
+                        <i class="material-icons" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/delete/{{ _id }}')">delete</i>
+                    {{/app__views.delete}}
+                    {{^app__views.delete}}
+                        <i class="material-icons disabled">delete</i>
+                    {{/app__views.delete}}
+                    {{#app__views.edit}}
+                        <i class="material-icons" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/edit/{{ _id }}')">edit</i>
+                    {{/app__views.edit}}
+                    {{^app__views.edit}}
+                        <i class="material-icons disabled">edit</i>
+                    {{/app__views.edit}}
+                </div>
+            {{/edit__mode}}
+        </div>
+    {{/app__list}}
+    {{#app__views.new}}
+        {{#edit__mode}}
+            <i class="material-icons button-circle" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}{{ app__views.new.view__path }}')">add</i>
+        {{/edit__mode}}
+    {{/app__views.new}}
+</div>

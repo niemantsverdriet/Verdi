@@ -1,0 +1,28 @@
+    <head >
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1" />
+        <meta name="content-language" content="nl" />
+        <title>{{ document__title }}</title>
+        <meta property="og:title" content="{{ document__title }}" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:title" content="{{ document__title }}" />
+        <meta name="description" content="{{ document__description }}" />
+        <meta property="og:description" content="{{ document__description }}" />
+        <meta name="twitter:description" content="{{ document__description }}" />
+        <meta property="og:url" content="{{ document__canonicalurl }}" />
+        <link href="{{ document__canonicalurl }}" rel="canonical" />
+        <meta property="og:locale" content="nl" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        {{#css__urls}}
+            <link rel="stylesheet" href="/stylesheets/{{ . }}.css">
+        {{/css__urls}}
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/javascripts/loader.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            mod.loadPlugins({{{ document__plugins }}});
+        </script>
+    </head>

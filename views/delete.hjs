@@ -1,0 +1,7 @@
+<div id="delete">
+    <p class="text">Het verwijderen van <strong>{{ singular__typename }} {{ doc__title }}</strong> kan niet worden teruggedraait. Definitief verwijderen?</p>
+    <div class="confirm-buttons">
+        <span onclick="mod.nav.to('{{ back__navigation }}')">Annuleer</span>
+        <span onclick="mod.onLoaded(['delete'], () => { mod.delete.request('{{ apps__path }}{{ app__path }}/delete/{{ doc__id }}/confirm') });">Verwijder</span>
+    </div>
+</div>

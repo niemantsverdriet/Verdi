@@ -1,0 +1,104 @@
+#top_bar {
+    position:               fixed;
+    line-height:            3em;
+    padding-left:           24px;
+    padding-right:          24px;
+    top:                    0;
+    left:                   0;
+    width:                  100%;
+    font-size:              20px;
+    box-sizing:             border-box;
+}
+
+.app_title {
+    overflow:               hidden;
+    text-overflow:          ellipsis;
+    display:                inline-block;
+    width:                  calc(100% - 80px);
+    white-space:            nowrap;                 
+}
+
+#body {
+    padding-top:            60px;
+}
+
+#textview {
+    padding:                24px;
+}
+
+#no_list_results {
+    padding:                24px;
+    color:                  #888;
+}
+
+i.back {
+    line-height:            60px;
+    float:                  left;
+    margin-right:           12px;
+    cursor:                 pointer;
+    color:                  #444;
+}
+
+i.menubutton {
+    line-height:            60px;
+    float:                  right;
+    margin-left:            12px;
+    cursor:                 pointer;
+    color:                  #444;
+}
+
+#menu {
+    position:               fixed;
+    width:                  80vw;
+    max-width:              400px;
+    height:                 100%;
+    background-color:       white;
+    top:                    0;
+    right:                  0;
+    box-shadow:             0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    background-color:       white;
+}
+
+#menu-background-layer {
+    position:               fixed;
+    top:                    0;
+    left:                   0;
+    width:                  100vw;
+    height:                 100vh;
+    background-color:       rgba(0, 0, 0, 0.2);
+    display:                none;
+    z-index:                10;
+}
+
+#menu ul {
+    list-style-type:        none;
+    padding-left:           0;
+}
+
+#menu ul li {
+    display:                block;
+    line-height:            2em;
+}
+
+#menu ul li span {
+    display:                block;
+    line-height:            2em;
+    cursor:                 pointer;
+    color:                  #666;
+}
+
+#menu ul li span i {
+    float:                  left;
+    padding-left:           24px;
+    padding-right:          24px;
+    padding-top:            4px;
+}
+
+#menuheader {
+    background-color:       #eee;
+    height:                 90px;
+}
+
+.toggle_on {
+    color:                  #388E3C;
+}

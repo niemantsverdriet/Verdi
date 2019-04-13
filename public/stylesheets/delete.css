@@ -1,0 +1,18 @@
+#delete {
+    padding:                24px;
+}
+
+.confirm-buttons {
+    columns:                2 auto;
+    max-width:              400px;
+    margin-top:             2em;
+}
+
+.confirm-buttons span {
+    display:                block;
+    color:                  #337ab7;
+    cursor:                 pointer;
+    line-height:            2em;
+    font-weight:            700;
+    text-align:             center;
+}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    {{> document__head}}
+    <body>
+        <div class="apps">
+            {{#apps}}
+            <div class="app-button" onclick="mod.nav.to('/apps{{ app__path }}')">
+                <i class="material-icons">{{ app__icon }}</i>
+                <span class="title">{{ app__title }}</span>
+            </div>
+            {{/apps}}
+        </div>
+    </body>
+</html>

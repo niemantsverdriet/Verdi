@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    {{> document__head}}
+    <body>
+        <div id="top_bar">
+            {{# back__navigation }}
+                <i class="material-icons back" onclick="mod.nav.to('{{ back__navigation }}')">arrow_back</i>
+            {{/ back__navigation }}
+            <span class="app_title">{{ app__title }}</span>
+            <i class="material-icons menubutton" onclick="jQuery('#menu-background-layer').show()">more_vert</i>
+        </div>
+        <div id="menu-background-layer" onclick="jQuery(this).hide();">
+            <div id="menu" onclick="event.stopPropagation();">
+                <div id="menuheader">
+                    &nbsp;
+                </div>
+                <ul>
+                    {{#editmode__toggle}}
+                        <li>
+                            <span onclick="mod.onLoaded(['system'], () => { mod.system.appSetting('{{ apps__path }}{{ app__path }}', 'edit__mode', {{#edit__mode}}false{{/edit__mode}}{{^edit__mode}}true{{/edit__mode}}); })">
+                                <i class="material-icons {{#edit__mode}}toggle_on{{/edit__mode}}">toggle_{{#edit__mode}}on{{/edit__mode}}{{^edit__mode}}off{{/edit__mode}}</i>
+                                Edit modus
+                            </span
+                        ></li>
+                    {{/editmode__toggle}}
+                </ul>
+            </div>
+        </div>
+        <div id="body">
+            {{> app__view }}
+        </div>
+    </body>
+</html>

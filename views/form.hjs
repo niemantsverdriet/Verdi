@@ -1,0 +1,8 @@
+<div id="form" class="mdform">
+    {{#form__model}}
+       <script type="text/javascript">mod.onLoaded(['form'], () => { mod.form.create({{{ form__model }}}, {{{ form__params }}}, {{{ form__values }}}) });</script>
+    {{/form__model}}
+    {{^form__model}}
+        <div id="no_list_results">Geen datamodel voor {{ plural__typename }} gevonden ...</div>
+    {{/form__model}}
+</div>
