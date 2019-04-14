@@ -1,30 +1,52 @@
 var express = require('express');
 var system = express();
 
-for (var i in global.apps) {
-    var app = apps[i];
-
-    // naam controleren
-    if (!app.name) {
-        log.log('Bij app ' + i + ' is geen naam opgegeven, app niet toegevoegd');
-        continue;
+async function loadApps(system) {
+    try {
+        var apps = await db.instance.collection(db.toCollectionName('system__apps')).find({}).toArray();
+    } catch(error) {
+        log.log(error);
+        var apps = [];
     }
 
-    // pad controleren
-    if (!app.path) {
-        log.log('Bij app ' + app.name + ' is geen geen pad opgegeven, app niet toegevoegd');
-        continue;
-    }
+    // apps registreren
+    for (var i in apps) {
 
-    // app registreren bij router
-    system.use('/' + app.path, require('../apps/' + app.path).router);
+        var config = apps[i];
 
-    // eventueel app registreren als model factory
-    if (app.modelcategories) {
-        for (var i in app.modelcategories) {
-            models.registerApp(app.modelcategories[i], app.path);
+        // naam controleren
+        if (!config.app__title) {
+            log.log('Bij app ' + i + ' is geen naam opgegeven, app niet toegevoegd');
+            continue;
+        }
+
+        // pad controleren
+        if (!config.app__path) {
+            log.log('Bij app ' + config.app__path + ' is geen geen pad opgegeven, app niet toegevoegd');
+            continue;
+        }
+
+        // app registreren bij router
+        if (config.app__path == '/datafields2') {
+            system.use(config.app__path, require('../apps' + config.app__path).router);
+        } else {  
+            const ROSapp = require('../system/ROSapp');
+            var app = new ROSapp();
+            app.setConfig(config);
+            var router = express.Router();
+            app.setRouter(router);
+            system.use(config.app__path, router);
+        }
+
+        // eventueel app registreren als model factory
+        if (app.modelcategories) {
+            for (var i in app.modelcategories) {
+                models.registerApp(app.modelcategories[i], app.path);
+            }
         }
     }
 }
+
+loadApps(system);
 
 module.exports = system;

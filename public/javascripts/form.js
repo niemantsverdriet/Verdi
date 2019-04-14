@@ -155,6 +155,67 @@ if (!mod.form) {
                             // toe te voegen
                             var toAdd = label;
                             break;
+                        case 'username':
+
+                            // veld maken
+                            var field = document.createElement('input');
+                            field.autocomplete = 'username';
+                            field.name = name;
+
+                            // placeholder
+                            if (params.field__placeholder) {
+                                field.placeholder = params.field__placeholder;
+                            }
+
+                            // waarde
+                            if (values && values[name]) {
+                                field.value = values[name];
+                            }
+                            
+                            // toe te voegen
+                            var toAdd = field;
+                            break;
+                        case 'password':
+
+                            // veld maken
+                            var field = document.createElement('input');
+                            field.type = 'password';
+                            field.autocomplete = 'current-password';
+                            field.name = name;
+
+                            // placeholder
+                            if (params.field__placeholder) {
+                                field.placeholder = params.field__placeholder;
+                            }
+
+                            // waarde
+                            if (values && values[name]) {
+                                field.value = values[name];
+                            }
+                            
+                            // toe te voegen
+                            var toAdd = field;
+                            break;
+                        case 'email':
+
+                            // veld maken
+                            var field = document.createElement('input');
+                            field.type = 'email';
+                            field.name = name;
+
+                            // placeholder
+                            if (params.field__placeholder) {
+                                field.placeholder = params.field__placeholder;
+                            }
+
+                            // waarde
+                            if (values && values[name]) {
+                                field.value = values[name];
+                            }
+                            
+                            // toe te voegen
+                            var toAdd = field;
+                            break;
                         default:
 
                             // veld maken

@@ -9,13 +9,10 @@ async function loadApps(router) {
         var apps = [];
     }
 
-    global.apps = apps;
-    console.log(apps);
-
     /* Startscherm weergeven */
     router.get('/', function(req, res) {
         res.render('startscreen', {
-            title:  'Remote OS',
+            title:  'Cloud OS',
             apps :  apps,
             partials : {
                 document__head  : 'head'
@@ -27,43 +24,5 @@ async function loadApps(router) {
 }
 
 loadApps(router);
-
-//     {
-//         name : 'apps',
-//         icon : {
-//             type : 'md-icon',
-//             id : 'apps'
-//         },
-//         path : 'appoverview',
-//         modelcategories : [ 'system' ]
-//     },
-//     {
-//         name : 'data modellen',
-//         icon : {
-//             type : 'md-icon',
-//             id : 'storage'
-//         },
-//         path : 'datamodels',
-//         modelcategories : [ 'system' ]
-//     },
-//     {
-//         name : 'velden',
-//         icon : {
-//             type : 'md-icon',
-//             id : 'format_align_left'
-//         },
-//         path : 'datafields',
-//         modelcategories : [ 'system' ]
-//     },
-//     {
-//         name : 'recepten',
-//         icon : {
-//             type : 'md-icon',
-//             id : 'local_dining'
-//         },
-//         path : 'recipes',
-//         modelcategories : [ 'food' ]
-//     }
-// ];
 
 module.exports = router;

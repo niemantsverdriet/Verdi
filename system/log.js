@@ -39,7 +39,7 @@ class Log {
                     ('0' + now.getSeconds()).slice(-2);
 
         // naar console loggen
-        console.log(date + ' | ' + title + (message == 'nodb' ? '' : ': ' +  message));
+        console.log(date + ' | ' + title + (message == '' ? '' : ': ' +  message));
                     
         // opslaan in database
         // if (message != 'nodb') {

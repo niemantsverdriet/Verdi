@@ -8,7 +8,7 @@ app.setConfig({
     app__mode : "list",
     singular__typename : "app",
     plural__typename : "apps",
-    main__model : "system.apps",
+    model__app : "system.apps",
     app__path : "/appoverview",
     app__views : {
         new : {

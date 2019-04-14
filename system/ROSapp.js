@@ -42,6 +42,26 @@ class ROSApp {
      * @author Jan Niemantsverdriet
      */
     setRouter(router) {
+
+        // standaard delete view
+        if (this.config.delete__views) {
+            router.get('/delete/*', this.show.bind({ app : this, view : 'delete' }));
+            router.post('/delete/*/confirm', this.deleteItem.bind({ app : this }));
+        }
+
+        // standaard edit view
+        if (this.config.edit__views) {
+            router.get('/edit/*', this.show.bind({ app : this, view : 'edit' }));
+            router.post('/edit/*/update', this.updateOnPost.bind({ app : this }));
+        }   
+
+        // standaard new view
+        if (this.config.new__views) {
+            router.get('/new', this.show.bind({ app : this, view : 'new' }));
+            router.post('/new/store', this.storePost.bind({ app : this }));
+        } 
+
+        // overige views
         if (this.config.app__views) {
             for (var viewname in this.config.app__views) {
                 var view = this.config.app__views[viewname];
@@ -89,7 +109,7 @@ class ROSApp {
         config.partials = { document__head  : 'head' };
 
         // standaard plugins
-        config.document__plugins = ['nav'];
+        config.document__plugins = ['nav','display'];
 
         // edit modus
         if (!("edit__mode" in config)) config.edit__mode = config.default__edit ? config.default__edit : false;
@@ -111,8 +131,8 @@ class ROSApp {
                     break;
                 case 'delete':
                     try {
-                        var currentItem = await db.instance.collection(db.toCollectionName(this.app.config.main__model)).findOne({'_id' : new mongo.ObjectID(urlParams[4])});
-                        var model = models.getModel(config.main__model);
+                        var currentItem = await db.instance.collection(db.toCollectionName(this.app.config.model__app)).findOne({'_id' : new mongo.ObjectID(urlParams[4])});
+                        var model = models.getModel(config.model__app);
                         config.doc__title = this.app.parseDisplayAttribute(config, currentItem, 'title__display');
                         config.doc__id = currentItem._id;
                         config.app__title = 'Verwijder ' + config.doc__title;
@@ -125,8 +145,8 @@ class ROSApp {
                     break;
                 case 'edit':
                     try {
-                        var currentItem = await db.instance.collection(db.toCollectionName(this.app.config.main__model)).findOne({'_id' : new mongo.ObjectID(urlParams[4])});
-                        var model = models.getModel(config.main__model);
+                        var currentItem = await db.instance.collection(db.toCollectionName(this.app.config.model__app)).findOne({'_id' : new mongo.ObjectID(urlParams[4])});
+                        var model = models.getModel(config.model__app);
                         config.doc__title = this.app.parseDisplayAttribute(config, currentItem, 'title__display');
                         config.app__title = 'Bewerk ' + config.doc__title;
                         config.app__mode = 'editform';
@@ -141,7 +161,7 @@ class ROSApp {
 
         // formulier aanpassingen
         if (config.app__mode == "newform" || config.app__mode == "editform") {
-            var formmodel = JSON.parse(JSON.stringify(models.getModel(config.main__model)));
+            var formmodel = JSON.parse(JSON.stringify(models.getModel(config.model__app)));
             for (var name in formmodel) {
                 var field = formmodel[name];
                 if (field.options__collection && field.options__label) {
@@ -170,7 +190,7 @@ class ROSApp {
                 break;
             case 'list':
                 config.partials.app__view = 'applist';
-                var model = models.getModel(config.main__model);
+                var model = models.getModel(config.model__app);
                 config.css__urls.push('list');
 
                 // relevante menu items tonen
@@ -178,7 +198,7 @@ class ROSApp {
 
                 // gegevens uit de database halen
                 try {
-                    var dbresults = await db.instance.collection(db.toCollectionName(this.app.config.main__model)).find({}).toArray();
+                    var dbresults = await db.instance.collection(db.toCollectionName(this.app.config.model__app)).find({}).toArray();
                 } catch(error) {
                     log.log(error);
                     var dbresults = [];
@@ -191,7 +211,7 @@ class ROSApp {
                     doc.title__doc = this.app.parseDisplayAttribute(config, doc, 'title__display');
 
                     // omschrijving bepalen
-                    doc.description__doc = this.app.parseDisplayAttribute(config, doc, 'title__description');
+                    doc.description__doc = this.app.parseDisplayAttribute(config, doc, 'description__display');
 
                     // afbeelding bepalen
                     if (config.default__image) doc.image__doc = config.default__image;
@@ -206,22 +226,22 @@ class ROSApp {
             case 'newform':
                 config.partials.app__view = 'form';
                 config.css__urls.push('form');
-                if (config.main__model) {
+                if (config.model__app) {
                     config.form__model = JSON.stringify(formmodel);
                     config.form__params = JSON.stringify({ 
                         submit__label : 'Opslaan',
-                        post__url : '/apps' + config.app__path + config.app__views[view].view__path + '/store'
+                        post__url : '/apps' + config.app__path + '/new/store'
                     });
                 }
                 break; 
             case 'editform':
                 config.partials.app__view = 'form';
                 config.css__urls.push('form');
-                if (config.main__model) {
+                if (config.model__app) {
                     config.form__model = JSON.stringify(formmodel);
                     config.form__params = JSON.stringify({ 
                         submit__label : 'Werk bij',
-                        post__url : '/apps' + config.app__path + config.app__views[view].view__path.replace('*', currentItem._id) + '/update'
+                        post__url : '/apps' + config.app__path + '/edit/' + currentItem._id + '/update'
                     });
                     config.form__values = JSON.stringify(currentItem);
                 }
@@ -229,21 +249,55 @@ class ROSApp {
             case 'delete':
                 config.partials.app__view = 'delete';
                 config.css__urls.push('delete');
-                break;  
+                break; 
+            case 'applist':
+
+                config.partials.app__view = 'shortcuts';
+
+                config.css__urls.push('start');
+
+                // relevante menu items tonen
+                config.editmode__toggle = true;
+
+                // gegevens uit de database halen
+                try {
+                    var dbresults = await db.instance.collection(db.toCollectionName(this.app.config.model__app)).find({}).toArray();
+                } catch(error) {
+                    log.log(error);
+                    var dbresults = [];
+                }
+                config.app__list = [];
+                for (var i in dbresults) {
+                    var doc = dbresults[i];
+
+                    // titel bepalen
+                    doc.title__doc = this.app.parseDisplayAttribute(config, doc, 'title__display');
+
+                    // omschrijving bepalen
+                    doc.description__doc = this.app.parseDisplayAttribute(config, doc, 'description__display');
+
+                    // afbeelding bepalen
+                    if (config.default__image) doc.image__doc = config.default__image;
+
+                    // hack voor apps app
+                    delete doc.app__path;
+
+                    // document toevoegen aan lijst
+                    config.app__list.push(doc);
+                }
+                break;
         }
 
         // pluginslijst omzetten naar een string
         config.document__plugins = JSON.stringify(config.document__plugins);
 
         // view tonen
-        console.log(config);
         res.render('ROSapp', config);
     }
 
     parseDisplayAttribute(config, doc, attribute) {
-        if (!config.display__attributes) return null;
-        if (!config.display__attributes[attribute]) return null;
-        return this.parseDisplayAttribute2(doc, config.display__attributes[attribute]);
+        if (!config[attribute]) return null;
+        return this.parseDisplayAttribute2(doc, config[attribute]);
     }
 
     parseDisplayAttribute2(doc, attribute) {
@@ -267,7 +321,7 @@ class ROSApp {
      * @author Jan Niemantsverdriet
      */
     storePost(req, res) {
-        db.instance.collection(db.toCollectionName(this.app.config.main__model)).insertOne(req.body, (error, result) => {
+        db.instance.collection(db.toCollectionName(this.app.config.model__app)).insertOne(req.body, (error, result) => {
             if (error) {
                 res.json({ error : 'Niet op kunnen slaan in database'});
             } else {
@@ -287,7 +341,7 @@ class ROSApp {
     deleteItem(req, res) {
         var urlParams = req.originalUrl.split('/');
         var mongo = require('mongodb');
-        db.instance.collection(db.toCollectionName(this.app.config.main__model)).deleteOne({'_id' : new mongo.ObjectID(urlParams[4])}, (error, result) => {
+        db.instance.collection(db.toCollectionName(this.app.config.model__app)).deleteOne({'_id' : new mongo.ObjectID(urlParams[4])}, (error, result) => {
             if (error) res.json({ error : this.app.config.singular__typename + ' niet kunnen verwijderen' });
             else res.json({ success : this.app.config.singular__typename + ' verwijderd' });
         });
@@ -304,7 +358,7 @@ class ROSApp {
     updateOnPost(req, res) {
         var urlParams = req.originalUrl.split('/');
         var mongo = require('mongodb');
-        db.instance.collection(db.toCollectionName(this.app.config.main__model)).updateOne(
+        db.instance.collection(db.toCollectionName(this.app.config.model__app)).updateOne(
             {'_id' : new mongo.ObjectID(urlParams[4])}, 
             { $set : this.app.processFormData(req.body) }, 
             (error, result) => {

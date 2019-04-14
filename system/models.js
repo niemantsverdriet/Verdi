@@ -51,7 +51,8 @@ class Models {
         for (var id in models) {
             var model = models[id];
             // if (model.name == 'datamodels' || model.name == 'apps') this.addModel(model.namespace, model.name, model.fields);
-            if (model.name == 'datamodels' || model.name == 'apps') this.addModel(model.namespace, model.name, model.fields);
+            // if (model.name == 'datamodels' || model.name == 'apps') this.addModel(model.namespace, model.name, model.fields);
+            this.addModel(model.namespace, model.name, model.fields);
         }
     }
 
@@ -89,6 +90,12 @@ class Models {
      * @author Jan Niemantsverdriet
      */
     getModel(fullname) {
+
+        // parameter controleren
+        if (!fullname) {
+            log.log('Geen model opgegeven');
+            return {};
+        }
         
         // fullname splitsen
         var model = fullname.split('.');

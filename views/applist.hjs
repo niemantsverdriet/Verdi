@@ -15,25 +15,25 @@
             {{/description__doc}}
             {{#edit__mode}}
                 <div class="card-buttons">
-                    {{#app__views.delete}}
+                    {{#delete__views}}
                         <i class="material-icons" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/delete/{{ _id }}')">delete</i>
-                    {{/app__views.delete}}
-                    {{^app__views.delete}}
+                    {{/delete__views}}
+                    {{^delete__views}}
                         <i class="material-icons disabled">delete</i>
-                    {{/app__views.delete}}
-                    {{#app__views.edit}}
+                    {{/delete__views}}
+                    {{#edit__views}}
                         <i class="material-icons" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/edit/{{ _id }}')">edit</i>
-                    {{/app__views.edit}}
-                    {{^app__views.edit}}
+                    {{/edit__views}}
+                    {{^edit__views}}
                         <i class="material-icons disabled">edit</i>
-                    {{/app__views.edit}}
+                    {{/edit__views}}
                 </div>
             {{/edit__mode}}
         </div>
     {{/app__list}}
-    {{#app__views.new}}
+    {{#new__views}}
         {{#edit__mode}}
-            <i class="material-icons button-circle" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}{{ app__views.new.view__path }}')">add</i>
+            <i class="material-icons button-circle" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/new')">add</i>
         {{/edit__mode}}
-    {{/app__views.new}}
+    {{/new__views}}
 </div>

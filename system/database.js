@@ -1,6 +1,6 @@
 "use strict";
 
-// marktet klasse
+// database klasse
 class Database {
 
     /**

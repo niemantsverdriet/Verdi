@@ -1,0 +1,13 @@
+<div class="apps">
+    {{#app__list}}
+        <div class="app-button" onclick="mod.nav.to('/apps{{ app__path }}')">
+            <i class="material-icons">{{ app__icon }}</i>
+            <span class="title">{{ app__title }}</span>
+        </div>
+    {{/app__list}}
+    {{#edit__mode}}
+        <div class="app-button" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/new')">
+            <i class="material-icons button-circle">add</i>
+        </div>
+    {{/edit__mode}}
+</div>

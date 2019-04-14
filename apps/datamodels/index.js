@@ -14,7 +14,7 @@ app.setConfig({
         title__display : "{model__namespace}.{model__name}",
         title__description : "{model__description}"
     },
-    main__model : "system.datamodels",
+    model__ap : "system.datamodels",
     app__views : {
         new : {
             view__path : '/new',

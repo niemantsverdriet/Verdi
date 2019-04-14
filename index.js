@@ -17,5 +17,5 @@ db.connect(() => {
     const app = require('./app.js')
     const port = 3000
     
-    app.listen(port, () => log.log(`Remote OS gestart op ${port}!`));
+    app.listen(port, () => log.log(`Cloud OS gestart op poort ${port}`));
 });
