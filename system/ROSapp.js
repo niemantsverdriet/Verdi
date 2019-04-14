@@ -94,6 +94,8 @@ class ROSApp {
      * @author Jan Niemantsverdriet
      */
     async show(req, res) {
+
+        // basiswaarden
         var currentItem = null;
         var urlParams = req.originalUrl.split('/');
         var mongo = require('mongodb');
@@ -116,6 +118,12 @@ class ROSApp {
 
         // terugknop
         config.back__navigation = '/';
+
+        // inlog contoleren
+        if (config.login__required) {
+            var login = require('./login.js');
+            if (!login.requireLoginScreen(config, req, res)) return;
+        }
 
         // instellingen van de view laden
         if (view) {
@@ -384,6 +392,8 @@ class ROSApp {
     processFormData(model, data) {
         
         var result = {};
+
+        // door de post data heen lopen
         for (var key in data) {
 
             // checkbox afvangen omdat een uitgevinkte checkbox niets instuurt
@@ -405,7 +415,7 @@ class ROSApp {
                 case 'password':
                     if (data[key] != '') {
                         var crypto = require('./crypt.js');
-                        result.key = crypto.encryptPassword(data[key]);
+                        result[key] = crypto.encryptPassword(data[key]);
                     }
                     break;
                 default:

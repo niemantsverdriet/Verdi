@@ -1,4 +1,7 @@
 <div id="form" class="mdform">
+    {{#intro__form}}
+        <p class="formintro">{{ intro__form }}</p>
+    {{/intro__form}}
     {{#form__model}}
        <script type="text/javascript">mod.onLoaded(['form'], () => { mod.form.create({{{ form__model }}}, {{{ form__params }}}, {{{ form__values }}}) });</script>
     {{/form__model}}

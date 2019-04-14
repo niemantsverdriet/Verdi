@@ -187,11 +187,6 @@ if (!mod.form) {
                             if (params.field__placeholder) {
                                 field.placeholder = params.field__placeholder;
                             }
-
-                            // waarde
-                            if (values && values[name]) {
-                                field.value = values[name];
-                            }
                             
                             // toe te voegen
                             var toAdd = field;
@@ -245,6 +240,7 @@ if (!mod.form) {
                     // wrapper maken
                     var wrapper = document.createElement('div');
                     wrapper.className = wrapClass;
+                    wrapper.id = 'wrapper_' + name;
                     wrapper.appendChild(toAdd);
 
                     // show script
@@ -399,8 +395,35 @@ if (!mod.form) {
              * @since 8 april 2019
              * @author Jan Niemantsverdriet
              */
-            storeResponse(data) {
-                mod.onLoaded(['message'], () => { mod.message.inline('form', data) });
+            storeResponse(data, textStatus, request) {
+
+                mod.onLoaded(['system'], () => {
+                    
+                    // standaard acties afvangen
+                    mod.system.handleServerResponse(data, textStatus, request);
+
+                    // oude errors opruimen
+                    jQuery('form .error').removeClass('error');
+                    jQuery('form .error_message').remove();
+    
+                    // veld errors
+                    if (data.error__fields) {
+                        for (var field in data.error__fields) {
+                            var wrapper = document.getElementById('wrapper_' + field);
+                            if (wrapper) {
+                                jQuery(wrapper).addClass('error');
+                                
+                                var errorMessage = document.createElement('p');
+                                errorMessage.className = 'error_message';
+                                errorMessage.innerHTML = data.error__fields[field];
+                                wrapper.appendChild(errorMessage);
+                            }
+                        }
+                    }
+    
+                    // weergave van standaard meldingen
+                    mod.onLoaded(['message'], () => { mod.message.inline('form', data) });
+                });
             }
         }
 

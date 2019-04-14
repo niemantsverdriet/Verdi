@@ -5,13 +5,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var path = require('path');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var apps = require('./routes/apps');
 
 var app = express();
 
-// view engine setup
+app.use(session({
+    secret: 'Cloud OS super secret token jabba jabba',
+    cookie: { 
+        maxAge: 60000 
+    },
+    proxy: true,
+    resave: false,
+    saveUninitialized: false
+}));
+
+// view engine setup 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 

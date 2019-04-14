@@ -13,23 +13,25 @@ if (!mod.message) {
          * @author Jan Niemantsverdriet
          */
         inline(id, data) {
+            
+            // element waar de inline message in getoond moet worden
             var oElement = document.getElementById(id);
             if (!oElement) return;
-
+            
+            // controleren of er uberhaupt een reactie is
+            if (!data || Object.keys(data).length == 0) mod.message.inline(id, { info : 'geen reactie van de server' });
+            
+            // standaard reacties afvangen
             var checks = ['success', 'info', 'warn', 'error'];
-            var found = false;
-            oElement.innerHTML = '';
             for (var i in checks) {
                 if (data[checks[i]]) {
+                    oElement.innerHTML = '';
                     var paragraph = document.createElement('p');
                     paragraph.innerHTML = data[checks[i]];
                     paragraph.className = 'inline_message ' + checks[i];
                     oElement.appendChild(paragraph);
-                    found = true;
                 }
             }
-            
-            if (!found) mod.message.inline(id, { info : 'geen reactie van de server' });
         }
     }
 

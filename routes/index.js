@@ -9,7 +9,7 @@ async function loadApps(router) {
         var apps = [];
     }
 
-    /* Startscherm weergeven */
+    // Startscherm weergeven
     router.get('/', function(req, res) {
         res.render('startscreen', {
             title:  'Cloud OS',
@@ -21,6 +21,10 @@ async function loadApps(router) {
             document__plugins : "[ 'nav' ]"
         });
     });
+
+    // Login verwerken
+    var login = require('../system/login.js');
+    router.post('/login', login.processLogin);
 }
 
 loadApps(router);
