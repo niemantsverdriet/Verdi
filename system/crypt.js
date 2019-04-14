@@ -15,13 +15,20 @@ class Crypt {
     /**
      * Zet het wachtwoord om naar een hash
      * 
-     * @param {String} wachtwoord               het ingevoerde wachtwoord
+     * @param {String} password               het ingevoerde wachtwoord
      * @since 14 april 2019
      * @author Jan Niemantsverdriet
      */
-    encryptPassword(callback) {
-        
+    encryptPassword(password) {
+        const crypto = require('crypto');
+
+        const secret = 'cloud-os-salty-string-for-passwords';
+        const hash = crypto.createHmac('sha256', secret)
+                        .update(password)
+                        .digest('hex');
+
+        return hash;
     }
 }
 
-module.exports = new Database();
+module.exports = new Crypt();

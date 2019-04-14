@@ -29,7 +29,7 @@ class Models {
         var models = {};
         for (var i in dblist) {
             var model = dblist[i];
-            models[model._id] = { namespace : model.model__namespace, name : model.model__name, fields : [] };
+            models[model._id] = { namespace : model.model__namespace, name : model.model__name, fields : {} };
         }
            
         // velden uit de database halen
@@ -44,7 +44,7 @@ class Models {
         for (var i in dblist) {
             var field = dblist[i];
             if (!models[field.field__model]) continue;
-            models[field.field__model].fields.push(field);
+            models[field.field__model].fields[field.field__name] = field;
         }
 
         // datamodellen inladen

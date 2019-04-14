@@ -321,13 +321,16 @@ class ROSApp {
      * @author Jan Niemantsverdriet
      */
     storePost(req, res) {
-        db.instance.collection(db.toCollectionName(this.app.config.model__app)).insertOne(req.body, (error, result) => {
-            if (error) {
-                res.json({ error : 'Niet op kunnen slaan in database'});
-            } else {
-                res.json({ success : 'Nieuw ' + this.app.config.singular__typename + ' aangemaakt' });
+        db.instance.collection(db.toCollectionName(this.app.config.model__app)).insertOne(
+            this.app.processFormData(models.getModel(this.app.config.model__app), req.body),
+            (error, result) => {
+                if (error) {
+                    res.json({ error : 'Niet op kunnen slaan in database'});
+                } else {
+                    res.json({ success : 'Nieuw ' + this.app.config.singular__typename + ' aangemaakt' });
+                }
             }
-        });
+        );
     }
 
     /**
@@ -360,7 +363,7 @@ class ROSApp {
         var mongo = require('mongodb');
         db.instance.collection(db.toCollectionName(this.app.config.model__app)).updateOne(
             {'_id' : new mongo.ObjectID(urlParams[4])}, 
-            { $set : this.app.processFormData(req.body) }, 
+            { $set : this.app.processFormData(models.getModel(this.app.config.model__app), req.body) }, 
             (error, result) => {
                 if (error) {
                     res.json({ error : this.app.config.singular__typename + ' niet bij kunnen werken' });
@@ -378,10 +381,12 @@ class ROSApp {
      * @since 11 april 2019
      * @author Jan Niemantsverdriet
      */
-    processFormData(data) {
-        console.log(data);
+    processFormData(model, data) {
+        
         var result = {};
         for (var key in data) {
+
+            // checkbox afvangen omdat een uitgevinkte checkbox niets instuurt
             if (key.substring(0, 9) == 'checkbox-') {
                 if (data[key.substring(9)]) {
                     data[key.substring(9)]= true;
@@ -390,8 +395,21 @@ class ROSApp {
                     data[key.substring(9)]= false;
                     result[key.substring(9)]= false;
                 }
-            } else {
-                result[key] = data[key];
+            }
+
+            // als het veld niet voorkomt in het model, niet verwerken
+            if (!model[key]) continue;
+
+            // waar aanpassen per type
+            switch (model[key].field__type) {
+                case 'password':
+                    if (data[key] != '') {
+                        var crypto = require('./crypt.js');
+                        result.key = crypto.encryptPassword(data[key]);
+                    }
+                    break;
+                default:
+                    result[key] = data[key];
             }
         }
         return result;
