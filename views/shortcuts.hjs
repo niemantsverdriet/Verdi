@@ -1,12 +1,28 @@
 <div class="apps">
     {{#app__list}}
-        <div class="app-button" onclick="mod.nav.to('/apps{{ app__path }}')">
+        <div class="app-button" onclick="mod.nav.to('/apps{{ thisApp__path }}')">
             <i class="material-icons">{{ app__icon }}</i>
             <span class="title">{{ app__title }}</span>
+            {{#edit__mode}}
+                <div class="card-buttons">
+                    {{#delete__views}}
+                        <i class="material-icons" onclick="event.stopPropagation(); mod.nav.to('{{ apps__path }}{{ app__path }}/delete/{{ link__id }}')">delete</i>
+                    {{/delete__views}}
+                    {{^delete__views}}
+                        <i class="material-icons disabled">delete</i>
+                    {{/delete__views}}
+                    {{#edit__views}}
+                        <i class="material-icons" onclick="event.stopPropagation(); mod.nav.to('{{ apps__path }}{{ app__path }}/edit/{{ link__id }}?linked__on=_&id__user=_&position__dashboard=_')">edit</i>
+                    {{/edit__views}}
+                    {{^edit__views}}
+                        <i class="material-icons disabled">edit</i>
+                    {{/edit__views}}
+                </div>
+            {{/edit__mode}}
         </div>
     {{/app__list}}
     {{#edit__mode}}
-        <div class="app-button" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/new')">
+        <div class="app-button" onclick="mod.nav.to('{{ apps__path }}{{ app__path }}/new?linked__on={{ currentapp__id }}&id__user={{ user__id }}&position__dashboard={{ nextposition__links }}')">
             <i class="material-icons button-circle">add</i>
         </div>
     {{/edit__mode}}

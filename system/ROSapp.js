@@ -97,7 +97,8 @@ class ROSApp {
 
         // basiswaarden
         var currentItem = null;
-        var urlParams = req.originalUrl.split('/');
+        var urlSplitted = req.originalUrl.split('?');
+        var urlParams = urlSplitted[0].split('/');
         var mongo = require('mongodb');
 
         // scope instellingen ophalen
@@ -153,6 +154,7 @@ class ROSApp {
                     break;
                 case 'edit':
                     try {
+                        console.log(urlParams[4]);
                         var currentItem = await db.instance.collection(db.toCollectionName(this.app.config.model__app)).findOne({'_id' : new mongo.ObjectID(urlParams[4])});
                         var model = models.getModel(config.model__app);
                         config.doc__title = this.app.parseDisplayAttribute(config, currentItem, 'title__display');
@@ -238,7 +240,9 @@ class ROSApp {
                     config.form__model = JSON.stringify(formmodel);
                     config.form__params = JSON.stringify({ 
                         submit__label : 'Opslaan',
-                        post__url : '/apps' + config.app__path + '/new/store'
+                        post__url : '/apps' + config.app__path + '/new/store',
+                        values__prefill : this.app.createPrefill(req),
+                        crud__display : 'new'
                     });
                 }
                 break; 
@@ -249,7 +253,9 @@ class ROSApp {
                     config.form__model = JSON.stringify(formmodel);
                     config.form__params = JSON.stringify({ 
                         submit__label : 'Werk bij',
-                        post__url : '/apps' + config.app__path + '/edit/' + currentItem._id + '/update'
+                        post__url : '/apps' + config.app__path + '/edit/' + currentItem._id + '/update',
+                        crud__display : 'edit',
+                        values__prefill : this.app.createPrefill(req)
                     });
                     config.form__values = JSON.stringify(currentItem);
                 }
@@ -267,7 +273,28 @@ class ROSApp {
                 // relevante menu items tonen
                 config.editmode__toggle = true;
 
-                // gegevens uit de database halen
+                // user id
+                config.user__id = req.session.user._id;
+
+                // id van deze app
+                config.currentapp__id = this.app.config._id;
+
+                // geen back knop
+                delete config.back__navigation;
+
+                // apps uit de database halen
+                try {
+                    var dbresults = await db.instance.collection(db.toCollectionName('system.apps')).find({}).toArray();
+                } catch(error) {
+                    log.log(error);
+                    var dbresults = [];
+                }
+                var apps = {};
+                for (var i in dbresults) {
+                    apps[dbresults[i]._id] = dbresults[i];
+                }
+
+                // links uit de database halen
                 try {
                     var dbresults = await db.instance.collection(db.toCollectionName(this.app.config.model__app)).find({}).toArray();
                 } catch(error) {
@@ -275,24 +302,24 @@ class ROSApp {
                     var dbresults = [];
                 }
                 config.app__list = [];
+                var maxposition = 0;
                 for (var i in dbresults) {
                     var doc = dbresults[i];
+                    var thisApp = apps[doc.linked__to];
 
-                    // titel bepalen
-                    doc.title__doc = this.app.parseDisplayAttribute(config, doc, 'title__display');
+                    if (doc.position__dashboard) maxposition = Math.max(maxposition, parseInt(doc.position__dashboard));
 
-                    // omschrijving bepalen
-                    doc.description__doc = this.app.parseDisplayAttribute(config, doc, 'description__display');
-
-                    // afbeelding bepalen
-                    if (config.default__image) doc.image__doc = config.default__image;
-
-                    // hack voor apps app
-                    delete doc.app__path;
+                    thisApp.thisApp__path = thisApp.app__path;
+                    thisApp.link__id = doc._id;
+                    delete thisApp.app__path;
 
                     // document toevoegen aan lijst
-                    config.app__list.push(doc);
+                    config.app__list.push(thisApp);
                 }
+
+                // positie
+                config.nextposition__links = (maxposition + 1);
+
                 break;
         }
 
@@ -442,6 +469,11 @@ class ROSApp {
         this.app.config[req.body.name] = value;
         res.set('X-ROS-reload-page', 'true');
         res.json({ success : req.body.name  + ' aangepast naar ' + JSON.stringify(value) });
+    }
+
+    createPrefill(req) {
+        if (!req.query) return {};
+        return req.query;
     }
 }
 

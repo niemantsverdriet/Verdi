@@ -18,6 +18,16 @@ if (!mod.form) {
                 // formulier maken
                 var form = document.createElement('form');
 
+                // prefill aan de waarden toevoegen
+                if (formparams.values__prefill) {
+                    if (!values) values = {};
+                    for (var prefillname in formparams.values__prefill) {
+                        if (!(prefillname in values) && formparams.values__prefill[prefillname] != '_') {
+                            values[prefillname] = formparams.values__prefill[prefillname];
+                        }
+                    }
+                }
+
                 // velden toevoegen
                 for (var i in model) {
 
@@ -25,7 +35,7 @@ if (!mod.form) {
                     var name = params.field__name;
 
                     // crud tests
-                    if (params.crud__display && params.crud__display == "new" && values) continue;
+                    if (params.crud__display && params.crud__display != 'all' && params.crud__display != formparams.crud__display) continue;
 
                     // type goedzetten
                     if (!params.field__type) params.field__type = 'shorttext';
@@ -242,6 +252,16 @@ if (!mod.form) {
                     wrapper.className = wrapClass;
                     wrapper.id = 'wrapper_' + name;
                     wrapper.appendChild(toAdd);
+
+                    // prefill gedrag
+                    if (formparams.values__prefill && formparams.values__prefill[name]) {
+                        if (params.behaviour__prefilled) {
+                            switch(params.behaviour__prefilled) {
+                                case 'hide':
+                                    wrapper.style.display = "none";
+                            }
+                        }
+                    } 
 
                     // show script
                     if (params.hideon__script) {

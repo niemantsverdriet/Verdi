@@ -76,7 +76,7 @@ i.menubutton {
     height:                 100vh;
     background-color:       rgba(0, 0, 0, 0.2);
     display:                none;
-    z-index:                10;
+    z-index:                20;
 }
 
 #menu ul {
