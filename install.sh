@@ -1,11 +1,8 @@
 
 #!/bin/bash
 
-# apt bijwerken
-apt-get update
-
 # mongodb installeren
-apt-get install mongodb -y
+apt-get update && apt-get install mongodb -y
 
 # mongodb starten
 service mongodb start
@@ -27,3 +24,10 @@ mongoimport --db ROS --collection system__datamodels --file ~/Verdi/installation
 mongoimport --db ROS --collection system__fields --file ~/Verdi/installation/start-system__fields.json
 mongoimport --db ROS --collection system__apps --file ~/Verdi/installation/start-system__apps.json
 mongoimport --db ROS --collection system__users --file ~/Verdi/installation/start-system__users.json
+
+# nodejs installeren
+cd ~
+curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+bash nodesource_setup.sh
+apt-get update && apt-get install nodejs -y
+
