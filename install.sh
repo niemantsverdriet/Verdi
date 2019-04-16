@@ -31,3 +31,6 @@ curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
 bash nodesource_setup.sh
 apt-get update && apt-get install nodejs -y
 
+# app starten
+cd ~/Verdi
+npm start
