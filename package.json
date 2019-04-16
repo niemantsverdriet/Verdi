@@ -9,20 +9,24 @@
     "body-parser": "~1.0.0",
     "cookie-parser": "~1.0.1",
     "css-loader": "^2.1.1",
-    "debug": "~0.7.4",
-    "express": "~4.0.0",
+    "debug": "^0.7.4",
+    "express": "^4.0.0",
     "express-session": "^1.16.1",
     "extract-loader": "^3.1.0",
     "file-loader": "^3.0.1",
+    "fresh": "^0.5.2",
     "hjs": "~0.0.6",
     "material-components-web": "^1.1.0",
+    "mime": "^2.4.2",
     "mongodb": "^3.2.3",
-    "morgan": "~1.0.0",
+    "morgan": "^1.9.1",
+    "negotiator": "^0.6.1",
     "node-sass": "^4.11.0",
+    "qs": "^6.7.0",
     "sass-loader": "^7.1.0",
     "send": ">=0.11.1",
     "serve-favicon": "^2.5.0",
     "static-favicon": "~1.0.0",
-    "webpack": "^3.12.0"
+    "webpack": "^4.30.0"
   }
 }
