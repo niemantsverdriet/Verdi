@@ -1,5 +1,9 @@
 "use strict";
 
+// loading modules
+var db = require(rootDir + '/system/database.js');
+var log = require(rootDir + '/system/log.js');
+
 // app klasse
 class ROSApp {
 

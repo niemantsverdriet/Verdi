@@ -1,5 +1,10 @@
+"use strict";
+
+// load modules
 var express = require('express');
 var system = express();
+var db = require(rootDir + '/system/database.js');
+var log = require(rootDir + '/system/log.js');
 
 async function loadApps(system) {
     try {

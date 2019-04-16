@@ -4,18 +4,25 @@
 var path = require('path');
 global.rootDir = path.resolve(__dirname);
 
-// log starten
-global.log = require('./system/log.js');
+// load modules
+var language = require(rootDir + '/system/language.js');
+var db = require(rootDir + '/system/database.js');
+var log = require(rootDir + '/system/log.js');
 
-// database en app starten
-global.db = require('./system/database.js');
+// load configuration
+var config = require('./config.js');
+
+// start database
 db.connect(() => {
 
-    // models starten
-    global.models = require('./system/models.js');
+    // load translations
+    language.loadTranslations(config.app__language, () => {
 
-    const app = require('./app.js')
-    const port = 3000
-    
-    app.listen(port, () => log.log(`Cloud OS gestart op poort ${port}`));
+        // load models
+        global.models = require('./system/models.js');
+
+        // start app
+        const app = require('./app.js')
+        app.listen(config.port__number, () => log.log(`Verdi OS gestart op poort ${config.port__number}`));
+    })
 });

@@ -40,18 +40,6 @@ class Log {
 
         // naar console loggen
         console.log(date + ' | ' + title + (message == '' ? '' : ': ' +  message));
-                    
-        // opslaan in database
-        // if (message != 'nodb') {
-        //     var doc = {
-        //         title : title,
-        //         message : message,
-        //         icon : icon,
-        //         time : now,
-        //         date : date
-        //     }
-        //     db.instance.collection('log').insertOne(doc, (err, res) => {});
-        // }
     }
 }
 
