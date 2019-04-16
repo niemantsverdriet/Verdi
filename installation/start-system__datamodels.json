@@ -1,6 +1,5 @@
 {"_id":{"$oid":"5cab9a2600264d32fc931d33"},"model__namespace":"system","model__name":"datamodels","model__description":"Alle datamodellen en bijbehorende eigenschappen. De velden binnen het datamodel staan niet in deze collectie."}
 {"_id":{"$oid":"5cae445c971f133b67c7c4be"},"model__namespace":"system","model__name":"fields","model__description":"Alle velden bij alle collecties. Alle eigenschappen van de velden en formulierweergaven staan hier in opgeslagen."}
-{"_id":{"$oid":"5cae52a655cdbc48430bfca4"},"model__namespace":"products","model__name":"groceries","model__description":"Een lijst van alle mogelijke producten in een supermarkt."}
 {"_id":{"$oid":"5cb0975cf0ce256c5706fea2"},"model__namespace":"system","model__name":"apps","model__description":"De apps / views binnen dit systeem.","app__mode":"list"}
 {"_id":{"$oid":"5cb2300d37e6852727cc8069"},"model__namespace":"navigation","model__name":"apps","model__description":"Een lijst met snelkoppelingen naar apps."}
 {"_id":{"$oid":"5cb2c47c2bd5253693858c8f"},"model__namespace":"system","model__name":"users","model__description":"De gebruikers binnen dit systeem."}
